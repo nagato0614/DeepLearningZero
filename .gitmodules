@@ -1,0 +1,3 @@
+[submodule "nagatolib"]
+	path = nagatolib
+	url = https://github.com/nagato0614/nagatolib.git
