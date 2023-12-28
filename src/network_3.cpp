@@ -8,7 +8,7 @@
 namespace nagato
 {
 
-std::map<std::string, MatrixNf> nagato::init_network()
+std::map<std::string, MatrixNf> init_network()
 {
   std::map<std::string, MatrixNf> network;
 
@@ -33,7 +33,7 @@ std::map<std::string, MatrixNf> nagato::init_network()
   return network;
 }
 
-nagato::MatrixNf nagato::forward(const std::map<std::string, MatrixNf> &network,
+MatrixNf forward(const std::map<std::string, MatrixNf> &network,
                                  const nagato::MatrixNf &x)
 {
   const auto &W1 = network.at("W1");
@@ -53,7 +53,7 @@ nagato::MatrixNf nagato::forward(const std::map<std::string, MatrixNf> &network,
   return y;
 }
 
-nagato::MatrixNf predict(const std::map<std::string, MatrixNf> &network,
+MatrixNf predict(const std::map<std::string, MatrixNf> &network,
                          const MatrixNf &x)
 {
   const auto &W1 = network.at("W1");
@@ -70,6 +70,17 @@ nagato::MatrixNf predict(const std::map<std::string, MatrixNf> &network,
   const auto a3 = Dot(z2, W3) + b3;
   const auto y = softmax(a3);
 
+  return y;
+}
+
+std::vector<MatrixNf> predict(const std::map<std::string, MatrixNf> &network,
+                              const std::vector<MatrixNf> &x)
+{
+  std::vector<MatrixNf> y;
+  for (const auto &x_i : x)
+  {
+    y.push_back(predict(network, x_i));
+  }
   return y;
 }
 }

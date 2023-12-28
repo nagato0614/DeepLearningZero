@@ -35,6 +35,21 @@ set_target_properties(nagato_deep_learning_zero_lib
         PROPERTIES
         LINKER_LANGUAGE CXX
 )
+# コンパイルオプションを追加
+# DEBUG
+target_compile_options(nagato_deep_learning_zero_lib
+        PRIVATE
+        -g
+        -O0
+        -Wall
+)
+# RELEASE
+target_compile_options(nagato_deep_learning_zero_lib
+        PRIVATE
+        -O3
+        -Wall
+        -march=native
+)
 
 
 # DeepLearningZero executable

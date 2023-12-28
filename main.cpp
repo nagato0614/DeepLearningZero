@@ -35,20 +35,33 @@ int main()
 
   // 正解率
   auto accuracy_cnt = 0uz;
-  for (auto i = 0uz; i < test_data_size; i++)
+  const auto batch_size = 100uz;
+  for (auto i = 0uz; i < test_data_size; i += batch_size)
   {
-    const auto &test_img = MatrixNf(img_data.at("test_img")[i], 28, 28);
-    const auto &test_label = label_data.at("test_label")[i];
-    const auto y = predict(network, test_img);
-    const auto [row, col] = y.ArgMax();
-    std::cout << "label: " << test_label << ", predict: " << col << std::endl;
+    const std::vector<MatrixNf> test_img_batch(
+      img_data.at("test_img").begin() + i,
+      img_data.at("test_img").begin() + i + batch_size
+    );
 
-    if (test_label == col)
+    const std::vector<float> test_label_batch(
+      label_data.at("test_label").begin() + i,
+      label_data.at("test_label").begin() + i + batch_size
+    );
+
+    const auto y = predict(network, test_img_batch);
+    for (auto j = 0uz; j < batch_size; j++)
     {
-      accuracy_cnt++;
-    }
-  }
+      const auto [row, col] = y[j].ArgMax();
+      std::cout << "label: " << test_label_batch[row] << ", predict: " << col << std::endl;
 
+      if (test_label_batch[j] == col)
+      {
+        accuracy_cnt++;
+      }
+    }
+
+  }
+  std::cout << "Correct: " << accuracy_cnt << std::endl; // "Correct: 9352
   std::cout << "Accuracy: " << static_cast<double>(accuracy_cnt) / test_data_size << std::endl;
 
   return 0;

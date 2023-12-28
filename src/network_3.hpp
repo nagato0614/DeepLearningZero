@@ -17,7 +17,18 @@ std::map<std::string, MatrixNf> init_network();
 MatrixNf forward(const std::map<std::string, MatrixNf> &network,
                  const MatrixNf &x);
 
-MatrixNf predict(const std::map<std::string, MatrixNf> &network, const MatrixNf &x);
+MatrixNf predict(const std::map<std::string, MatrixNf> &network,
+                 const MatrixNf &x);
+
+/**
+ * batch で predict する
+ * @param network
+ * @param x
+ * @return
+ */
+std::vector<MatrixNf>
+predict(const std::map<std::string, MatrixNf> &network,
+        const std::vector<MatrixNf> &x);
 
 }
 
