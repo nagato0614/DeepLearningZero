@@ -76,3 +76,4 @@ fabric.properties
 
 build/
 debug/
+.DS_Store

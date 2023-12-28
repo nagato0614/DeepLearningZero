@@ -2,7 +2,8 @@
 #include <fstream>
 #include "nagatolib.hpp"
 
-#include "activation_func.hpp"
+#include "network_3.hpp"
+#include "load_mnist.hpp"
 
 /**
  * ベクトルをcsvに保存する
@@ -25,21 +26,30 @@ void save_vec(const nagato::Vector<Primitive, size> &x,
 
 int main()
 {
-  std::cout << "step function" << std::endl;
-  std::cout << nagato::step_function(0.5) << std::endl;
-  std::cout << nagato::step_function(-0.5) << std::endl;
+  using namespace nagato;
 
-  constexpr auto min = -5.0f;
-  constexpr auto max = 5.0f;
-  constexpr auto step = 0.1f;
-  constexpr auto size = static_cast<std::size_t>((max - min) / step);
-  constexpr auto x = nagato::LineSpace<float, size>(min, max);
+  const auto [img_data, label_data] = load_mnist("../dataset/mnist.json");
 
-  const auto sigmoid = nagato::sigmoid(x);
-  const auto relu = nagato::relu(x);
+  const auto network = init_network();
+  const auto test_data_size = img_data.at("test_img").size();
 
-  save_vec(x, nagato::step_function(x), "step_function.csv");
-  save_vec(x, sigmoid, "sigmoid.csv");
-  save_vec(x, relu, "relu.csv");
+  // 正解率
+  auto accuracy_cnt = 0uz;
+  for (auto i = 0uz; i < test_data_size; i++)
+  {
+    const auto &test_img = MatrixNf(img_data.at("test_img")[i], 28, 28);
+    const auto &test_label = label_data.at("test_label")[i];
+    const auto y = predict(network, test_img);
+    const auto [row, col] = y.ArgMax();
+    std::cout << "label: " << test_label << ", predict: " << col << std::endl;
+
+    if (test_label == col)
+    {
+      accuracy_cnt++;
+    }
+  }
+
+  std::cout << "Accuracy: " << static_cast<double>(accuracy_cnt) / test_data_size << std::endl;
+
   return 0;
 }

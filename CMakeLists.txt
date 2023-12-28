@@ -3,6 +3,10 @@ project(DeepLearningZero)
 
 set(CMAKE_CXX_STANDARD 23)
 
+# json ライブラリを追加
+set(JSON_INCLUDE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/json/include)
+
+# 行列演算用のライブラリを追加
 add_subdirectory(nagatolib)
 file(GLOB_RECURSE SOURCES
         src/*.cpp)
@@ -25,11 +29,12 @@ target_link_libraries(nagato_deep_learning_zero_lib
 target_include_directories(nagato_deep_learning_zero_lib
         PRIVATE
         nagatolib/src
+        ${JSON_INCLUDE_DIR}
 )
-
 set_target_properties(nagato_deep_learning_zero_lib
         PROPERTIES
-        LINKER_LANGUAGE CXX)
+        LINKER_LANGUAGE CXX
+)
 
 
 # DeepLearningZero executable
@@ -43,4 +48,6 @@ target_include_directories(DeepLearningZero
         PRIVATE
         nagatolib/src
         src
+        ${JSON_INCLUDE_DIR}
 )
+
