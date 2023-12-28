@@ -1,3 +1,6 @@
 [submodule "nagatolib"]
 	path = nagatolib
 	url = https://github.com/nagato0614/nagatolib.git
+[submodule "json"]
+	path = json
+	url = https://github.com/nlohmann/json.git
