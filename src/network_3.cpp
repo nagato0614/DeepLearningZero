@@ -68,7 +68,7 @@ MatrixNf predict(const std::map<std::string, MatrixNf> &network,
   const auto a2 = Dot(z1, W2) + b2;
   const auto z2 = sigmoid(a2);
   const auto a3 = Dot(z2, W3) + b3;
-  const auto y = softmax(a3);
+  const auto y = Softmax(a3);
 
   return y;
 }
@@ -83,5 +83,6 @@ std::vector<MatrixNf> predict(const std::map<std::string, MatrixNf> &network,
   }
   return y;
 }
+
 }
 

@@ -131,7 +131,7 @@ MatrixN<Primitive> identity_function(const MatrixN<Primitive> &x)
 }
 
 template<typename Primitive>
-MatrixN<Primitive> softmax(const MatrixN<Primitive> &a)
+MatrixN<Primitive> Softmax(const MatrixN<Primitive> &a)
 {
   static_assert(std::is_arithmetic_v<Primitive>);
   const Primitive c = a.Max();

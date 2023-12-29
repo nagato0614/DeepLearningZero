@@ -54,6 +54,16 @@ load_mnist(const std::string &json_file_path)
   return std::make_pair(img_data, label_data);
 }
 
+std::vector<MatrixNf> convert_img_to_matrix(const std::vector<std::vector<float>> &img)
+{
+  std::vector<MatrixNf> matrix_img;
+  for (const auto &i : img)
+  {
+    matrix_img.emplace_back(i);
+  }
+  return matrix_img;
+}
+
 void show_img(const std::vector<float> &img, const std::string &filename)
 {
   std::cout << "Saving " << filename << std::endl;
@@ -133,6 +143,42 @@ load_weight(const std::string &json_file_path)
   bias.insert(std::make_pair("b2", b2));
   bias.insert(std::make_pair("b3", b3));
   return std::make_pair(weight, bias);
+}
+
+std::pair<std::vector<MatrixNf>,
+          std::vector<float>>
+choice_mini_batch(const std::vector<std::vector<float>> &x,
+                  const std::vector<float> &y,
+                  std::size_t batch_size)
+{
+  std::vector<MatrixNf> x_batch;
+  std::vector<float> y_batch;
+  Random random;
+  for (auto i = 0uz; i < batch_size; i++)
+  {
+    const auto get_random_number =
+      random.uniform_int_distribution<std::size_t>(0, x.size());
+    x_batch.emplace_back(x[get_random_number]);
+    y_batch.emplace_back(y[get_random_number]);
+  }
+  return std::make_pair(x_batch, y_batch);
+}
+
+MatrixNf convert_one_hot(int label, int size)
+{
+  MatrixNf one_hot = MatrixNf::Zero(1, size);
+  one_hot[0][label] = 1.0f;
+  return one_hot;
+}
+
+std::vector<MatrixNf> nagato::convert_one_hot(const std::vector<float> &label, int size)
+{
+  std::vector<MatrixNf> one_hot;
+  for (const auto &i : label)
+  {
+    one_hot.emplace_back(convert_one_hot(i, size));
+  }
+  return one_hot;
 }
 
 }
